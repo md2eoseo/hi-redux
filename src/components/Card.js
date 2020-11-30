@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { bindActionCreators } from "redux";
 import { toggleDone, deleteTodo } from "../store";
 
 function Card({ id, text, done, toggleDone, deleteTodo }) {
@@ -16,6 +15,4 @@ function Card({ id, text, done, toggleDone, deleteTodo }) {
   );
 }
 
-export default connect(null, (dispatch) =>
-  bindActionCreators({ toggleDone, deleteTodo }, dispatch)
-)(Card);
+export default connect(null, { toggleDone, deleteTodo })(Card);

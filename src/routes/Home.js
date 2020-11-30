@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import Card from "../components/Card";
 import { addTodo } from "../store";
 
@@ -37,7 +36,4 @@ function Home({ todos, addTodo }) {
   );
 }
 
-export default connect(
-  (state) => ({ todos: state }),
-  (dispatch) => bindActionCreators({ addTodo }, dispatch)
-)(Home);
+export default connect((state) => ({ todos: state }), { addTodo })(Home);
