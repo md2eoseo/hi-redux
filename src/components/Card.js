@@ -9,8 +9,8 @@ function Card({ id, text, done, toggleDone, deleteTodo }) {
       <Link to={`/${id}`}>
         <span>{text}</span>
       </Link>
-      <button onClick={() => toggleDone(id)}>done</button>
-      <button onClick={() => deleteTodo(id)}>delete</button>
+      <button onClick={() => toggleDone({ id })}>done</button>
+      <button onClick={() => deleteTodo({ id })}>delete</button>
     </div>
   );
 }

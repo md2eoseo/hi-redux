@@ -11,7 +11,7 @@ function Home({ todos, addTodo }) {
   const onSubmit = (e) => {
     e.preventDefault();
     if (text.trim() !== "") {
-      addTodo(text);
+      addTodo({ text });
       setText("");
     }
   };
