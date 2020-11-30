@@ -1,32 +1,73 @@
 import { createStore } from "redux";
 
-const add = document.querySelector("#add");
-const minus = document.querySelector("#minus");
-const span = document.querySelector("span");
-
-span.innerText = 0;
+const input = document.querySelector("input");
+const submit = document.querySelector("button");
+const ul = document.querySelector("ul");
 
 const ADD = "ADD";
-const MINUS = "MINUS";
+const DONE = "DONE";
+const DELETE = "DELETE";
 
-const countModifier = (count = 0, action) => {
+let id = 0;
+
+const todosModifier = (todos = [], action) => {
+  const { payload } = action;
   switch (action.type) {
     case ADD:
-      return count + 1;
-    case MINUS:
-      return count - 1;
+      return [...todos, createTodo()];
+    case DONE:
+      return todos.map((todo) =>
+        todo.id === payload.id ? { ...todo, done: !todo.done } : todo
+      );
+    case DELETE:
+      return todos.filter((todo) => todo.id !== payload.id);
     default:
-      return count;
+      return todos;
   }
 };
 
-const countStore = createStore(countModifier);
+const todosStore = createStore(todosModifier);
 
-const onChange = () => {
-  span.innerText = countStore.getState();
+const deleteTodo = (e) => {
+  todosStore.dispatch({ type: DELETE, payload: { id: parseInt(e.target.id) } });
 };
 
-countStore.subscribe(onChange);
+const toggleDone = (e) => {
+  todosStore.dispatch({ type: DONE, payload: { id: parseInt(e.target.id) } });
+};
 
-add.addEventListener("click", () => countStore.dispatch({ type: ADD }));
-minus.addEventListener("click", () => countStore.dispatch({ type: MINUS }));
+const createTodo = () => {
+  const todo = { id: id++, text: input.value.trim(), done: false };
+  input.value = "";
+  return todo;
+};
+
+const addTodo = (todo) => {
+  const li = document.createElement("li");
+  li.id = todo.id;
+  li.innerText = todo.text;
+  if (todo.done) {
+    li.style.textDecoration = "line-through";
+  }
+  li.addEventListener("click", toggleDone);
+  li.addEventListener("dblclick", deleteTodo);
+  ul.appendChild(li);
+};
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  if (input.value.trim() !== "") {
+    todosStore.dispatch({ type: ADD });
+  }
+  return false;
+};
+
+const onChange = () => {
+  ul.innerHTML = "";
+  const todos = todosStore.getState();
+  todos.forEach((todo) => addTodo(todo));
+};
+
+todosStore.subscribe(onChange);
+
+submit.addEventListener("click", handleSubmit);
