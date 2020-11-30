@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { actionCreators } from "../store";
+import { bindActionCreators } from "redux";
+import { toggleDone, deleteTodo } from "../store";
 
 function Card({ id, text, done, toggleDone, deleteTodo }) {
   return (
@@ -9,17 +10,12 @@ function Card({ id, text, done, toggleDone, deleteTodo }) {
       <Link to={`/${id}`}>
         <span>{text}</span>
       </Link>
-      <button onClick={toggleDone}>done</button>
-      <button onClick={deleteTodo}>delete</button>
+      <button onClick={() => toggleDone(id)}>done</button>
+      <button onClick={() => deleteTodo(id)}>delete</button>
     </div>
   );
 }
 
-function mapDispatchToProps(dispatch, { id }) {
-  return {
-    toggleDone: () => dispatch(actionCreators.toggleDone(id)),
-    deleteTodo: () => dispatch(actionCreators.deleteTodo(id)),
-  };
-}
-
-export default connect(null, mapDispatchToProps)(Card);
+export default connect(null, (dispatch) =>
+  bindActionCreators({ toggleDone, deleteTodo }, dispatch)
+)(Card);

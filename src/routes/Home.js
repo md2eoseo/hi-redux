@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import Card from "../components/Card";
-import { actionCreators } from "../store";
+import { addTodo } from "../store";
 
 function Home({ todos, addTodo }) {
   const [text, setText] = useState("");
@@ -36,16 +37,7 @@ function Home({ todos, addTodo }) {
   );
 }
 
-function mapStateToProps(state) {
-  return { todos: state };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    addTodo: (text) => dispatch(actionCreators.addTodo(text)),
-    toggleDone: (id) => dispatch(actionCreators.toggleDone(id)),
-    deleteTodo: (id) => dispatch(actionCreators.deleteTodo(id)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(
+  (state) => ({ todos: state }),
+  (dispatch) => bindActionCreators({ addTodo }, dispatch)
+)(Home);

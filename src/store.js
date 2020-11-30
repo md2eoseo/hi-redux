@@ -24,16 +24,14 @@ const reducer = (todos = [], action) => {
 
 const store = createStore(reducer);
 
-const addTodo = (text) => {
+export const addTodo = (text) => {
   return { type: ADD, payload: { text } };
 };
-const toggleDone = (id) => {
+export const toggleDone = (id) => {
   return { type: DONE, payload: { id } };
 };
-const deleteTodo = (id) => {
+export const deleteTodo = (id) => {
   return { type: DELETE, payload: { id } };
 };
-
-export const actionCreators = { addTodo, toggleDone, deleteTodo };
 
 export default store;

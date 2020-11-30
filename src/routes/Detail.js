@@ -10,10 +10,6 @@ function Detail({ todo }) {
   );
 }
 
-function mapStateToProps(state, ownProps) {
-  return {
-    todo: state.find((todo) => todo.id === parseInt(ownProps.match.params.id)),
-  };
-}
-
-export default connect(mapStateToProps)(Detail);
+export default connect((state, ownProps) => ({
+  todo: state.find((todo) => todo.id === parseInt(ownProps.match.params.id)),
+}))(Detail);
