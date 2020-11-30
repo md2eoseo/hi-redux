@@ -1,27 +1,27 @@
-import { createAction } from "@reduxjs/toolkit";
+import { createAction, createReducer } from "@reduxjs/toolkit";
 import { createStore } from "redux";
 
-export const addTodo = createAction("ADD");
-export const toggleDone = createAction("DONE");
-export const deleteTodo = createAction("DELETE");
+const ADD = "ADD";
+const DONE = "DONE";
+const DELETE = "DELETE";
+
+export const addTodo = createAction(ADD);
+export const toggleDone = createAction(DONE);
+export const deleteTodo = createAction(DELETE);
 
 let id = 0;
 
-const reducer = (todos = [], action) => {
-  const { payload } = action;
-  switch (action.type) {
-    case addTodo.type:
-      return [...todos, { id: id++, text: payload.text.trim(), done: false }];
-    case toggleDone.type:
-      return todos.map((todo) =>
-        todo.id === payload.id ? { ...todo, done: !todo.done } : todo
-      );
-    case deleteTodo.type:
-      return todos.filter((todo) => todo.id !== payload.id);
-    default:
-      return todos;
-  }
-};
+const reducer = createReducer([], {
+  ADD: (todos, { payload }) => {
+    todos.push({ id: id++, text: payload.text.trim(), done: false });
+  },
+  DONE: (todos, { payload }) =>
+    todos.map((todo) =>
+      todo.id === payload.id ? { ...todo, done: !todo.done } : todo
+    ),
+  DELETE: (todos, { payload }) =>
+    todos.filter((todo) => todo.id !== payload.id),
+});
 
 const store = createStore(reducer);
 
